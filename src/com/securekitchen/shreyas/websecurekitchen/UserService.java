@@ -1,3 +1,4 @@
+
 package com.securekitchen.shreyas.websecurekitchen;
 
 import javax.ws.rs.Consumes;
@@ -13,16 +14,16 @@ import org.json.JSONObject;
 @Path("/UserService")
 public class UserService {
 
-   SecureKitchenServer sks = new SecureKitchenServer();	
-   
+   SecureKitchenServer sks = new SecureKitchenServer();
+
    @GET
    @Path("/sensordata")
    @Produces(MediaType.TEXT_PLAIN)
    public String getData(){
 	   String response = sks.getSensorData("MT2015039");
 	   return response;
-   }	
-   
+   }
+
    @POST
    @Path("/ask")
    @Consumes(MediaType.TEXT_PLAIN)
@@ -30,19 +31,19 @@ public class UserService {
    {
 	   JSONObject objJSONObject;
 	   String response="{}";
-	   try 
+	   try
 	   {
 			objJSONObject = new JSONObject(strSensorDataQuery);
 			response = sks.getSensorData(objJSONObject.get("productcode").toString());
-			
+
 	   } catch (JSONException e) {
 		   response = "{error:true,message:\""+e.getMessage()+"\"}";
-	   } 
-		   
+	   }
+
 	   return response;
-		
+
    }
-   
+
    @POST
    @Path("/authenticate")
    @Consumes(MediaType.TEXT_PLAIN)
@@ -50,19 +51,19 @@ public class UserService {
    {
 	   JSONObject objJSONObject;
 	   String response="{}";
-	   try 
+	   try
 	   {
 			objJSONObject = new JSONObject(strSensorDataQuery);
 			response = sks.authenticateUser(objJSONObject.get("productcode").toString(),objJSONObject.get("password").toString(),objJSONObject.get("devicetoken").toString());
-			
+
 	   } catch (JSONException e) {
 		    response = "{error:true,message:\""+e.getMessage()+"\"}";
-	   } 
-		   
+	   }
+
 	   return response;
-		
+
    }
-   
+
    @POST
    @Path("/setdata")
    @Consumes(MediaType.TEXT_PLAIN)
@@ -70,19 +71,19 @@ public class UserService {
    {
 	   JSONObject objJSONObject;
 	   String response="{}";
-	   try 
+	   try
 	   {
 			objJSONObject = new JSONObject(strSensorData);
 			response = sks.setSensorData(objJSONObject.get("productcode").toString(),objJSONObject.get("datetimestamp").toString(),Integer.parseInt(objJSONObject.get("reading").toString()));
-			
+
 	   } catch (JSONException e) {
 		    response = "{error:true,message:\""+e.getMessage()+"\"}";
-	   } 
-		   
+	   }
+
 	   return response;
-		
+
    }
-   
+
    @POST
    @Path("/notifydevice")
    @Consumes(MediaType.TEXT_PLAIN)
@@ -90,17 +91,17 @@ public class UserService {
    {
 	   JSONObject objJSONObject;
 	   String response="{}";
-	   try 
+	   try
 	   {
 			objJSONObject = new JSONObject(strSensorData);
 			response = sks.notifyDevice(objJSONObject.get("productcode").toString(),objJSONObject.get("message").toString());
-			
+
 	   } catch (JSONException e) {
 		    response = "{error:true,message:\""+e.getMessage()+"\"}";
-	   } 
-		   
+	   }
+
 	   return response;
-		
+
    }
-   
+
 }
