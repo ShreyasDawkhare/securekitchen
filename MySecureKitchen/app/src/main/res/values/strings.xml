@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">MySecureKitchen</string>
+    <string name="btn_sign_in">Sign In</string>
+    <string name="hint_product_code">Enter the product code</string>
+    <string name="hint_password">Enter the password</string>
+    <string name="action_Signout">Sign Out</string>
+    <string name="action_Settings">Settings</string>
+</resources>
