@@ -47,7 +47,7 @@ public class UserService {
    @POST
    @Path("/authenticate")
    @Consumes(MediaType.TEXT_PLAIN)
-   public String authenticateUser(String strSensorDataQuery) //[{productcode:"MT2015039",password:"AbCd"}]
+   public String authenticateUser(String strSensorDataQuery) //[{productcode:"MT2015039",password:"abcd",devicetoken:"dvwdviuweojklcqo"}]
    {
 	   JSONObject objJSONObject;
 	   String response="{}";
@@ -95,6 +95,25 @@ public class UserService {
 	   {
 			objJSONObject = new JSONObject(strSensorData);
 			response = sks.notifyDevice(objJSONObject.get("productcode").toString(),objJSONObject.get("message").toString());
+
+	   } catch (JSONException e) {
+		    response = "{error:true,message:\""+e.getMessage()+"\"}";
+	   }
+
+	   return response;
+
+   }
+   @POST
+   @Path("/signout")
+   @Consumes(MediaType.TEXT_PLAIN)
+   public String signoutDevice(String strSensorData) //[{devicetoken:"dvwdviuweojklcqo"}]
+   {
+	   JSONObject objJSONObject;
+	   String response="{}";
+	   try
+	   {
+			objJSONObject = new JSONObject(strSensorData);
+			response = sks.signoutDevice(objJSONObject.get("devicetoken").toString());
 
 	   } catch (JSONException e) {
 		    response = "{error:true,message:\""+e.getMessage()+"\"}";
