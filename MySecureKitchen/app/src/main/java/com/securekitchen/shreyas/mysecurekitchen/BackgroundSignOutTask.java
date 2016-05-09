@@ -1,6 +1,8 @@
 package com.securekitchen.shreyas.mysecurekitchen;
 
 import android.os.Handler;
+import android.util.Log;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -29,7 +31,7 @@ public class BackgroundSignOutTask implements Runnable
 
             while(SecureKitchenClient.response.equals("~"))
             {
-                System.out.println("Waiting...");
+                Log.d("Signout","Waiting...");
                 Thread.sleep(100);
             }
             if(!SecureKitchenClient.response.equals("error"))
@@ -37,7 +39,7 @@ public class BackgroundSignOutTask implements Runnable
                 JSONObject objJSONObject;
                 try {
                     objJSONObject = new JSONObject(SecureKitchenClient.response);
-                    System.out.println(SecureKitchenClient.response);
+                    Log.d("Signout",SecureKitchenClient.response);
                     if(!((boolean)objJSONObject.get("error")))
                     {
                         rowsAffected = (int) objJSONObject.get("rowsAffected");
@@ -49,16 +51,16 @@ public class BackgroundSignOutTask implements Runnable
                     else
                     {
                         objStatus.isSignoutSuccess = false;
-                        System.out.println("Error Occured!!!");
+                        Log.e("Signout","Error Occured!!!");
                     }
 
                 } catch (JSONException e) {
-                    e.printStackTrace();
+                    Log.e("Signout",e.getMessage());
                 }
             }
 
         } catch (Exception e) {
-            System.out.println(e.getMessage());
+            Log.e("Signout",e.getMessage());
 
         }
         handler.post(new Runnable() {

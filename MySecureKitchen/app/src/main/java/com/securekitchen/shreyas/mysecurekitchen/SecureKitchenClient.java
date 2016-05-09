@@ -1,6 +1,7 @@
 package com.securekitchen.shreyas.mysecurekitchen;
 
 import android.os.AsyncTask;
+import android.util.Log;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -15,7 +16,7 @@ import java.net.URL;
 public class SecureKitchenClient extends AsyncTask<String, Void, Void>
 {
     public static String response="~";
-    public static String  host_ip = "172.16.86.163";
+    public static String  host_ip = "172.16.85.84";
 
     @Override
     protected Void doInBackground(String... params)
@@ -66,11 +67,11 @@ public class SecureKitchenClient extends AsyncTask<String, Void, Void>
 
         } catch (MalformedURLException e) {
             response="error";
-            e.printStackTrace();
+            Log.e("Client",e.getMessage());
 
         } catch (IOException e) {
             response="error";
-            e.printStackTrace();
+            Log.e("Client",e.getMessage());
 
         }
         return response;
@@ -90,7 +91,7 @@ public class SecureKitchenClient extends AsyncTask<String, Void, Void>
 
             String input = "{productcode:\""+params[1]+"\",password:\""+params[2]+"\",devicetoken:\""+params[3]+"\"}";
 
-            System.out.println(input);
+            Log.d("Client",input);
 
             BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(conn.getOutputStream(), "UTF-8"));
             bw.write(input);
@@ -110,15 +111,10 @@ public class SecureKitchenClient extends AsyncTask<String, Void, Void>
             conn.disconnect();
 
         } catch (MalformedURLException e) {
-
-
-
-            e.printStackTrace();
+            Log.e("Client",e.getMessage());
 
         } catch (IOException e) {
-
-            e.printStackTrace();
-
+            Log.e("Client",e.getMessage());
         }
         return response;
     }
@@ -137,7 +133,7 @@ public class SecureKitchenClient extends AsyncTask<String, Void, Void>
 
             String input = "{devicetoken:\""+params[1]+"\"}";
 
-            System.out.println(input);
+            Log.d("Client",input);
 
             BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(conn.getOutputStream(), "UTF-8"));
             bw.write(input);
@@ -160,11 +156,11 @@ public class SecureKitchenClient extends AsyncTask<String, Void, Void>
 
 
 
-            e.printStackTrace();
+            Log.e("Client",e.getMessage());
 
         } catch (IOException e) {
 
-            e.printStackTrace();
+            Log.e("Client",e.getMessage());
 
         }
         return response;

@@ -1,6 +1,8 @@
 package com.securekitchen.shreyas.mysecurekitchen;
 
 import android.os.Handler;
+import android.util.Log;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -32,7 +34,7 @@ public class BackgroundLoginTask implements Runnable
 
             while(SecureKitchenClient.response.equals("~"))
             {
-                System.out.println("Waiting...");
+                Log.d("Login","Waiting...");
                 Thread.sleep(100);
             }
 
@@ -40,16 +42,16 @@ public class BackgroundLoginTask implements Runnable
             try
             {
                 objJSONObject = new JSONObject(SecureKitchenClient.response);
-                System.out.println(SecureKitchenClient.response);
+                Log.d("Login",SecureKitchenClient.response);
                 isValidUser = (boolean)objJSONObject.get("authentication");
                 objLogin.isValidUser = isValidUser;
 
             } catch (JSONException e) {
-                e.printStackTrace();
+                Log.e("Login",e.getMessage());
             }
 
         } catch (Exception e) {
-            System.out.println(e.getMessage());
+           Log.e("Login",e.getMessage());
 
         }
         handler.post(new Runnable() {

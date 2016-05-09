@@ -105,9 +105,7 @@ public class Login extends AppCompatActivity
         pc = productCode.getText().toString();
         pwd = password.getText().toString();
 
-        System.out.println("Product Code : " + pc);
-        System.out.println("Password     : " + pwd);
-
+        Log.d("ProductInfo","Product Code: "+productCode+", Password:"+pwd);
         //Validate credentials
         SaveSharedPreference.setDeviceToken(this, deviceToken);
         BackgroundLoginTask loginTask = new BackgroundLoginTask(pc,pwd,deviceToken,this);
@@ -118,7 +116,7 @@ public class Login extends AppCompatActivity
 
     public void onBackgroundtaskCompleted()
     {
-        System.out.println("Outside thread :) " + isValidUser);
+        Log.d("Login","Is Valid User:" + isValidUser);
         //If valid user send product code to Status activity and load it
         if (isValidUser == true)
         {

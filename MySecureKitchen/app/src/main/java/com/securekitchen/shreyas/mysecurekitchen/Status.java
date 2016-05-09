@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -67,14 +68,14 @@ public class Status extends AppCompatActivity
             Intent objIntent = new Intent(this,Login.class);
             startActivity(objIntent);
             finish();
-            System.out.println("InValid user...Redirecting to Login Activity...");
+            Log.e("Satus","InValid user...Redirecting to Login Activity...");
         }
         else
         {
             productcode = SaveSharedPreference.getUserName(this);
             loadChart();
             // Stay at the current activity
-            System.out.println("Valid user...");
+            Log.d("Status","Valid user...");
             //handler.post(timedTask);
 
             callAsynchronousTask();
@@ -105,17 +106,17 @@ public class Status extends AppCompatActivity
                             JSONObject objJSONObject;
                             try
                             {
-                                System.out.println(SecureKitchenClient.response);
+                                Log.d("Status",SecureKitchenClient.response);
                                 objJSONObject = new JSONObject(SecureKitchenClient.response);
 
                                 entries.add(new Entry(Float.parseFloat(objJSONObject.get("reading").toString()), k));
                                 labels.add(objJSONObject.get("time").toString());
                                 k++;
-                                System.out.println("Reading : " + Float.parseFloat(objJSONObject.get("reading").toString()));
-                                System.out.println("Time    : " + objJSONObject.get("time").toString());
+                                Log.d("Status","Reading : " + Float.parseFloat(objJSONObject.get("reading").toString()));
+                                Log.d("Status","Time    : " + objJSONObject.get("time").toString());
 
                             } catch (JSONException e) {
-                                e.printStackTrace();
+                                Log.e("Status",e.getMessage());
                             }
 
                             data = new LineData(labels, dataset);
@@ -133,7 +134,7 @@ public class Status extends AppCompatActivity
                             }
 
                         } catch (Exception e) {
-                            System.out.println(e.getMessage());
+                            Log.e("Status",e.getMessage());
 
                         }
                     }
@@ -154,7 +155,7 @@ public class Status extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.action_Signout) {
-            System.out.println("Sign Out clicked...");
+            Log.d("Status","Sign Out clicked...");
             BackgroundSignOutTask signoutTask = new BackgroundSignOutTask(SaveSharedPreference.getDeviceToken(this),this);
             signoutTask.start();
 
@@ -162,12 +163,8 @@ public class Status extends AppCompatActivity
         }
 
         if (id == R.id.action_Settings) {
-            System.out.println("Settings clicked...");
+            Log.d("Status","Settings clicked...");
             stopLoadingDataFromServer();
-
-            //Intent objIntent = new Intent(this,Login.class);
-            //startActivity(objIntent);
-            //finish();
             return true;
         }
         return super.onOptionsItemSelected(item);
@@ -199,7 +196,7 @@ public class Status extends AppCompatActivity
     }
     public void onBackgroundtaskCompleted()
     {
-        System.out.println("Outside thread :) " + isSignoutSuccess);
+        Log.d("Status","Outside thread :) " + isSignoutSuccess);
         //If valid user send product code to Status activity and load it
         if (isSignoutSuccess == true)
         {
@@ -209,7 +206,7 @@ public class Status extends AppCompatActivity
             Intent objIntent = new Intent(this,Login.class);
             startActivity(objIntent);
             finish();
-            System.out.println("InValid user...Redirecting to Login Activity...");
+            Log.d("Status","InValid user...Redirecting to Login Activity...");
         }
         else //Else give error message to user and stay on Login activity
         {
