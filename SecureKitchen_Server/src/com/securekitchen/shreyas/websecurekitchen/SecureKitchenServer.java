@@ -7,10 +7,12 @@ import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
-
+import java.util.Random;
 import com.google.android.gcm.server.Message;
 import com.google.android.gcm.server.MulticastResult;
+import com.google.android.gcm.server.Result;
 import com.google.android.gcm.server.Sender;
 
 public class SecureKitchenServer {
@@ -36,13 +38,13 @@ public class SecureKitchenServer {
 			   reading = rs.getInt(2);
 		   }
 
-		   response = "{error:false,productcode:\""+productCode+"\", time:\""+timestamp +"\",timeformat:\"HH:mm:ss\", reading:"+reading+"}";
+		   response = "{\"error\":false,\"productcode\":\""+productCode+"\", \"time\":\""+timestamp +"\",\"timeformat\":\"HH:mm:ss\", \"reading\":"+reading+"}";
 	   } catch (SQLException e) {
-		   response = "{error:true,SQLException:"+e.getMessage()+"}";
+		   response = "{\"error\":true,\"SQLException\":"+e.getMessage()+"}";
 		   e.printStackTrace();
 		   return response;
 	   } catch (Exception e) {
-		   response = "{error:true,Exception:"+e.getMessage()+"}";
+		   response = "{\"error\":true,\"Exception\":"+e.getMessage()+"}";
 		   e.printStackTrace();
 		   return response;
 	   } finally{
@@ -77,7 +79,7 @@ public class SecureKitchenServer {
 		   
 		   if(password.equals(db_pwd))
 		   {
-			   if(devicetoken != null)
+			   if(devicetoken != null && !devicetoken.equals("web"))
 			   {
 				   ps = con.prepareStatement("insert into device (userid, devicetoken) select usr.userid,temp.devicetoken from (select ? as productcode, ? as devicetoken) as temp INNER JOIN user usr on usr.productcode = ? where not exists( Select d.deviceid from device d INNER JOIN user u on d.userid = u.userid where devicetoken = ?);");
 				   ps.setString(1, productCode);
@@ -87,19 +89,23 @@ public class SecureKitchenServer {
 				   
 				   rowsAffected= ps.executeUpdate();
 			   }
-			   response = "{error:false,productcode:\""+productCode+"\",authentication:true,rowsAffected:"+rowsAffected+"}";
+			   response = "{\"error\":false,\"productcode\":\""+productCode+"\",\"authentication\":true,\"rowsAffected\":"+rowsAffected+"}";
+			   if(devicetoken.equals("web"))
+			   {
+				   response = "{\"error\":false,\"productcode\":\""+productCode+"\",\"authentication\":true}";
+			   }
 		   }
 		   else
 		   {
-			   response = "{error:false,productcode:\""+productCode+"\",authentication:false,rowsAffected:"+rowsAffected+"}";
+			   response = "{\"error\":false,\"productcode\":\""+productCode+"\",\"authentication\":false,\"rowsAffected\":"+rowsAffected+"}";
 		   }
 		   
 	   } catch (SQLException e) {
-		   response = "{error:true,SQLException:\""+e.getMessage()+"\",authentication:false}";
+		   response = "{\"error\":true,\"SQLException\":\""+e.getMessage()+"\",\"authentication\":false}";
 		   e.printStackTrace();
 		   return response;
 	   } catch (Exception e) {
-		   response = "{error:true,Exception:\""+e.getMessage()+"\",authentication:false}";
+		   response = "{\"error\":true,\"Exception\":\""+e.getMessage()+"\",\"authentication\":false}";
 		   e.printStackTrace();
 		   return response;
 	   } finally{
@@ -138,13 +144,13 @@ public class SecureKitchenServer {
 		   
 		   rowsAffected= ps.executeUpdate();
 		   
-		   response = "{error:false,productcode:\""+productCode+"\",rowsAffected:"+rowsAffected+"}";
+		   response = "{\"error\":false,\"productcode\":\""+productCode+"\",\"rowsAffected\":"+rowsAffected+"}";
 	   } catch (SQLException e) {
-		   response = "{error:true,SQLException:\""+e.getMessage()+"\"}";
+		   response = "{\"error\":true,\"SQLException\":\""+e.getMessage()+"\"}";
 		   e.printStackTrace();
 		   return response;
 	   } catch (Exception e) {
-		   response = "{error:true,Exception:\""+e.getMessage()+"\"}";
+		   response = "{\"error\":true,\"Exception\":\""+e.getMessage()+"\"}";
 		   e.printStackTrace();
 		   return response;
 	   } finally{
@@ -159,7 +165,7 @@ public class SecureKitchenServer {
    
    public String notifyDevice(String productCode, String message)
    {
-	   String response="{error:true,response:false,message:\"No device registered\"}";
+	   String response="{\"error\":true,\"response\":false,message:\"No device registered\"}";
 	   Connection con = null;
 	   MysqlConnector objMysqlConnector = null;
 	   try 
@@ -182,14 +188,14 @@ public class SecureKitchenServer {
 		   {
 			   MulticastResult result = sender.send(msg,devicesList,0);
 	           System.out.println("Message Result: "+result.toString()); //Print message result on console
-	           response = "{error:false,productcode:\""+productCode+"\",result:\""+result.toString()+"\"}";
+	           response = "{\"error\":false,\"productcode\":\""+productCode+"\",result:\""+result.toString()+"\"}";
 		   }
 	   } catch (SQLException e) {
-		   response = "{error:true,SQLException:\""+e.getMessage()+"\",authentication:false}";
+		   response = "{\"error\":true,\"SQLException\":\""+e.getMessage()+"\",\"authentication\":false}";
 		   e.printStackTrace();
 		   return response;
 	   } catch (Exception e) {
-		   response = "{error:true,Exception:\""+e.getMessage()+"\",authentication:false}";
+		   response = "{\"error\":true,\"Exception\":\""+e.getMessage()+"\",\"authentication\":false}";
 		   e.printStackTrace();
 		   return response;
 	   } finally{
@@ -217,14 +223,14 @@ public class SecureKitchenServer {
 		   ps.setString(1, devicetoken);
 		   rowsAffected = ps.executeUpdate();
 		   
-		   response = "{error:false,response:true,rowsAffected:"+rowsAffected+"}";
+		   response = "{\"error\":false,\"response\":true,\"rowsAffected\":"+rowsAffected+"}";
 		   
 	   } catch (SQLException e) {
-		   response = "{error:true,SQLException:\""+e.getMessage()+"\",authentication:false}";
+		   response = "{\"error\":true,\"SQLException\":\""+e.getMessage()+"\",\"authentication\":false}";
 		   e.printStackTrace();
 		   return response;
 	   } catch (Exception e) {
-		   response = "{error:true,Exception:\""+e.getMessage()+"\",authentication:false}";
+		   response = "{\"error\":true,\"Exception\":\""+e.getMessage()+"\",\"authentication\":false}";
 		   e.printStackTrace();
 		   return response;
 	   } finally{
