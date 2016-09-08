@@ -1,0 +1,6 @@
+1. Install requests module
+	$ sudo pip install requests
+2. pyupm module is already installed by default
+
+3. Examples based on pyupm
+   https://github.com/intel-iot-devkit/upm/tree/master/examples/python
