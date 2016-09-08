@@ -195,7 +195,7 @@ public class SecureKitchenServer {
 		   e.printStackTrace();
 		   return response;
 	   } catch (Exception e) {
-		   response = "{\"error\":true,\"Exception\":\""+e.getMessage()+"\",\"authentication\":false}";
+		   response = "{\"error\":true,\"Exception\":\""+e.getStackTrace().toString()+"\",\"authentication\":false}";
 		   e.printStackTrace();
 		   return response;
 	   } finally{
